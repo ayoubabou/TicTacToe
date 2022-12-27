@@ -29,7 +29,7 @@ input,button,span{
     height: 500px; 
     border-radius: 30px;
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
 }
@@ -51,6 +51,18 @@ h1{
     border: 2px solid;
     border-radius: 20px;
     color: #222;
+}
+#pgexitbtn{
+    background-color: #444;
+    color: white;
+    border: 2px solid white;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 20px;
+    height: 100px;
+    width: 200px;
+    position: relative;
+    top: 500px;
 }
 
 
