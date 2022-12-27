@@ -125,7 +125,7 @@ function compfunc(arr){
 }
 function compfuncTwo(){
     if([ttt[0],ttt[8],ttt[2],ttt[6]].indexOf(compchoice)!=-1 && [ttt[0],ttt[8],ttt[2],ttt[6]].indexOf("")!=-1){
-        compfunc([0,8,6,2,8])
+        compfunc([0,8,6,2,4])
     }else if([ttt[1],ttt[7],ttt[3],ttt[5]].indexOf(compchoice)!=-1 && [ttt[1],ttt[7],ttt[3],ttt[5]].indexOf("")!=-1){
         compfunc([1,7,3,5,4])
     }else{
