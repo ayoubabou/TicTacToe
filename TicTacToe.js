@@ -112,9 +112,16 @@ function checkwinlose() {
     }
 }
 
-
+function shuffled_arr(array) {
+    let funcarr = []
+    while(funcarr.length!=array.length){
+        let randfunc = array[Math.floor(Math.random()*array.length)]
+        if(funcarr.indexOf(randfunc)==-1){funcarr.push(randfunc)}
+    }
+    return funcarr
+}
 function compfunc(arr){
-    for(let index of arr){
+    for(let index of shuffled_arr(arr)){
         if (spans[index].innerHTML === ""){
             spans[index].innerHTML = compchoice
             ttt[index] = compchoice
@@ -124,10 +131,8 @@ function compfunc(arr){
     }
 }
 function compfuncTwo(){
-    if([ttt[0],ttt[8],ttt[2],ttt[6]].indexOf(compchoice)!=-1 && [ttt[0],ttt[8],ttt[2],ttt[6]].indexOf("")!=-1){
+    if([ttt[0],ttt[8],ttt[2],ttt[6]].indexOf("")!=-1){
         compfunc([0,8,6,2,4])
-    }else if([ttt[1],ttt[7],ttt[3],ttt[5]].indexOf(compchoice)!=-1 && [ttt[1],ttt[7],ttt[3],ttt[5]].indexOf("")!=-1){
-        compfunc([1,7,3,5,4])
     }else{
         rand = rands[Math.floor(Math.random()*rands.length)]
         spans[rand].innerHTML = compchoice
@@ -170,10 +175,7 @@ document.getElementById("playbtn").onclick = ()=>{
         document.getElementById("start").style.display = "none"
         if(compBegins && choosenelements.length == 0){
             decider = 1
-            rand = rands[Math.floor(Math.random()*rands.length)]
-            spans[rand].innerHTML = compchoice
-            ttt[rand] = compchoice
-            rands.splice(rands.indexOf(rand),1)
+            compfuncTwo()
             choosenelements.push(compchoice)
             checkwinlose()
         }
@@ -214,7 +216,6 @@ function playagain_exit(){
     for (let index = 0; index < spans.length; index++) {
         spans[index].innerHTML = ""
     }
-    
     cross.style.background = "white"
     cross.style.color = "#444"
     circle.style.background = "white"
@@ -232,4 +233,3 @@ function playagain_exit(){
     decider = 0
     compBegins = iBegin = false
 }
-
