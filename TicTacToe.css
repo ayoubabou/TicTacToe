@@ -1,0 +1,58 @@
+body{
+    background-color: #444;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+input{
+    height: 20px;
+    width: 20px;
+}
+input,button,span{
+    cursor: pointer;
+}
+#playbtn{
+    height: 100px;
+    width: 150px;
+    font-size: 30px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: #222;
+}
+*{
+    text-align: center;
+}
+#tictactoe{
+    display: grid;
+    grid-template-columns:auto auto auto ;
+    border: 2px solid;
+    width: 500px;
+    height: 500px; 
+    border-radius: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+span{
+    padding: 10px;
+    border:1px solid;
+    border-radius: 30px;
+    font-size: 100px;
+    height: 145px;
+    width: 145px;
+}
+h1{
+    font-size: 50px;
+}
+.xo{
+    height: 100px;
+    width: 100px;
+    font-size: 50px;
+    border: 2px solid;
+    border-radius: 20px;
+    color: #222;
+}
+
+
+
+
