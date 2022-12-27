@@ -101,14 +101,14 @@ function checkwinlose() {
         winlose = true
     }
     if(!winlose && choosenelements.length==9){
-        alert("It is a Draw!\nRefresh to try again.")
+        alert("It is a Draw!")
         draw = true
     }
     if(winlose && choosenelements[choosenelements.length-1]==compchoice){
-        alert("Sorry, you Lose!!\nRefresh to try again.")
+        alert("Sorry, you Lose!!")
     }
     if(winlose && choosenelements[choosenelements.length-1]==mychoice){
-        alert("Congratulations!! You Win.\nRefresh to try again.")
+        alert("Congratulations!! You Win")
     }
 }
 
@@ -171,7 +171,6 @@ document.getElementById("playbtn").onclick = ()=>{
         if(compBegins && choosenelements.length == 0){
             decider = 1
             rand = rands[Math.floor(Math.random()*rands.length)]
-            console.log(rand)
             spans[rand].innerHTML = compchoice
             ttt[rand] = compchoice
             rands.splice(rands.indexOf(rand),1)
@@ -187,7 +186,7 @@ document.getElementById("playbtn").onclick = ()=>{
                             spans[ind].innerHTML = mychoice
                             rands.splice(rands.indexOf(ind),1)
                             choosenelements.push(mychoice)
-                            checkwinlose()     
+                            checkwinlose()    
                             if(!winlose && !draw){
                                 while(rands.length%2==decider){
                                     compchooseTwoinaRow(compchoice)
@@ -197,7 +196,7 @@ document.getElementById("playbtn").onclick = ()=>{
                                     compfuncTwo()
                                 }
                                 choosenelements.push(compchoice)
-                                checkwinlose()
+                                checkwinlose()    
                             }
                         }
                     }   
@@ -206,8 +205,31 @@ document.getElementById("playbtn").onclick = ()=>{
         }
     }
 }
-
-
-        
-
+function playagain_exit(){   
+    document.getElementById("play").style.display = "none"
+    document.getElementById("start").style.display = "block"
+    winlose = draw = isclicked = ischecked = inps[0].checked = inps[1].checked = inps[0].disabled = inps[1].disabled = false 
+    choosenelements = []
+    rands = [0,1,2,3,4,5,6,7,8]
+    for (let index = 0; index < spans.length; index++) {
+        spans[index].innerHTML = ""
+    }
+    
+    cross.style.background = "white"
+    cross.style.color = "#444"
+    circle.style.background = "white"
+    circle.style.color = "#444"
+    document.getElementById("playbtn").style.background = "white"
+    document.getElementById("playbtn").style.color = "#444"
+    document.getElementById("pgexitbtn").style.background = "#444"
+    document.getElementById("pgexitbtn").style.color = "white"
+    zerofoureight = twofoursix = zeroonetwo = threefourfive = sixseveneight = zerothreesix = onefourseven = twofiveeight = false
+    ttt = [
+        "","","",
+        "","","",
+        "","",""
+    ]
+    decider = 0
+    compBegins = iBegin = false
+}
 
