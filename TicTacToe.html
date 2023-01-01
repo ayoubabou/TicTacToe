@@ -1,24 +1,25 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="WS1CSS.css">
+    <link rel="stylesheet" href="TicTacToe.css">
     <title>Tic Tac Toe</title>
 </head>
 <body>
+    <h1 id="thetitle">T I C T A C T O E .</h1>
     <div id="start">
-        <h1>Choose between X and O</h1><br>
-        <button class="xo">X</button>
-        <button class="xo">O</button><br>
-        <h1>Who begins ?</h1>
+        <pre><h1>C H O O S E   B E T W E E N   X   A N D   O</h1></pre>
+        <button class="switchcolor" id="cross">X</button>
+        <button class="switchcolor" id="circle">O</button>
+        <pre><h1>W H O   B E G I N S   ?</h1></pre>
         <h2>Me<input type="checkbox" onchange="inpOne()"/></h2>
         <h2>Computer<input type="checkbox" onchange="inpTwo()"/></h2>
-        <button id="playbtn">Play</button>
+        <pre><button id="playbtn" class="switchcolor">Play</button></pre>
     </div>
     <div id="play">
+        <h2 id="choice"></h2>
         <div id="tictactoe">
             <span></span>
             <span></span>
@@ -30,9 +31,9 @@
             <span></span>
             <span></span>
         </div><br>
-        <button onclick="playagain_exit()" id="pgexitbtn">Play Again / Exit</button>
+        <pre><button onclick="playagain_exit()" id="pgexitbtn">Play again / <br>Exit</button></pre>
     </div>
-    <script src="WS1js.js"></script>
+    <script src="TicTacToe.js"></script>
 </body>
 </html>
 

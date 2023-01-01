@@ -1,235 +1,185 @@
-document.getElementById("play").style.display = "none"
-const cross  = document.getElementsByClassName("xo")[0]
-const circle  = document.getElementsByClassName("xo")[1]
-let mychoice, compchoice
-let isclicked = ischecked = false
-function checkclick(){
-    if(isclicked && ischecked){
-        document.getElementById("playbtn").style.background = "#444"
-        document.getElementById("playbtn").style.color = "white"
-        document.getElementById("playbtn").style.border = "2px solid white"
-    }
-}
-function btnselected(btn1,btn2) {
-    btn1.style.background = "#444"
-    btn1.style.color = "white"
-    btn2.style.background = "white"
-    btn2.style.color = "#222"
-    isclicked = true
-}
-circle.onclick = () => {
-    btnselected(circle,cross)
-    checkclick()
-    mychoice = "O"
-    compchoice = "X"
-}
-cross.onclick = () => {
-    btnselected(cross,circle)
-    checkclick()
-    mychoice = "X"
-    compchoice = "O"
-}
+const play = document.getElementById("play")
+play.classList.add("hide")
+const start = document.getElementById("start")
+const cross  = document.getElementById("cross")
+const circle  = document.getElementById("circle")
+const playbtn = document.getElementById("playbtn")
+let mychoice, compchoice = null
 let compBegins = iBegin = false
-let decider = 0
 let inps = document.getElementsByTagName("input")
 
-function inpOne(){
-    inps[1].checked = false
-    ischecked = true
-    iBegin = true
-    compBegins = false
+// Check if choices are done to play 
+function checkclick(){
+    if((iBegin || compBegins) && (mychoice != null || compchoice != null)){
+        playbtn.classList.remove("switchcolor")
+    }else{
+        playbtn.classList.add("switchcolor")
+    }
+}
+// circle or cross
+function circlecross(btn1,btn2,choice1,choice2){
+    btn1.classList.remove("switchcolor")
+    btn2.classList.add("switchcolor")
+    mychoice = choice1
+    compchoice = choice2
     checkclick()
-    inps[1].disabled = false
-    inps[0].disabled = true
+}
+circle.onclick = () => {
+    circlecross(circle,cross,"O","X")
+}
+cross.onclick = () => {
+    circlecross(cross,circle,"X","O")
+}
+// who begins
+function check(x,y,a,b){
+    iBegin = a
+    compBegins = b
+    checkclick()
+    inps[x].checked = inps[x].disabled = false
+    inps[y].disabled = true
+}
+function inpOne(){
+    check(1,0,true,false)
 }
 function inpTwo(){
-    inps[0].checked = false
-    ischecked = true
-    iBegin = false
-    compBegins = true
-    checkclick()
-    inps[0].disabled = false
-    inps[1].disabled = true
+    check(0,1,false,true)
 }
 
-
-let ttt = [
-    "","","",
-    "","","",
-    "","",""
-]
-let winlose = false
-let draw = false
-let rands = [0,1,2,3,4,5,6,7,8]
+let winlose = draw = false
+let onetonine = [0,1,2,3,4,5,6,7,8]
 let choosenelements = []
-let spans = document.getElementsByTagName("span")
-let rand
-let zerofoureight = twofoursix = zeroonetwo = threefourfive = sixseveneight = zerothreesix = onefourseven = twofiveeight = false
+let ttt = document.getElementsByTagName("span")
 
-function TwoinaRow(arr,elm){
-    let noXO = 0
-    for (const elm of arr){
-        if(elm === ""){
-            noXO++
+// Check wether (2 or 3 circles)/(2 or 3 crosses) in one line
+function TwoThreeinaLine(arr,elm){
+    let elmnum = noXO = 0
+    for (const item of arr){
+        if(item.innerHTML === elm){elmnum++}
+        else if(item.innerHTML === ""){noXO++}
+    }
+    if((elmnum==3)||(noXO==1 && elmnum == 2)){
+        return elmnum
+    }
+    return -1
+}
+// Color the line after win/lose
+function winlosefunc(arr) {
+    if(TwoThreeinaLine(arr,compchoice)==3 ||TwoThreeinaLine(arr,mychoice)==3){
+        winlose = true
+        for (let item of arr) {
+            item.classList.add("switchcolor")
         }
     }
-    if (noXO === 1){
-        if(arr[0]===arr[1]||arr[1]===arr[2]||arr[2]===arr[0]){
-            if ([arr[0],arr[1],arr[2]].indexOf(elm) !== -1) {
-                return true   
-            }
-        }   
-    }
-    return false
 }
-
-
-
+// Check wether there is a win/lose or a draw to show the alert messages
 function checkwinlose() {
     for (let i = 0; i < 3; i++) {
-        if(ttt[i] != "" && ttt[i] == ttt[i+3] && ttt[i] == ttt[i+6]){
-            winlose = true
-        }
-        if(ttt[i*3] != "" && ttt[i*3] == ttt[i*3+1] && ttt[i*3] == ttt[i*3+2]){
-            winlose = true
-        }
+        winlosefunc([ttt[i],ttt[i+3],ttt[i+6]])
+        winlosefunc([ttt[i*3],ttt[i*3+1],ttt[i*3+2]])
     }
-    if(ttt[0] != "" && ttt[0] == ttt[4] && ttt[0] == ttt[8]){
-        winlose = true
-    }
-    if(ttt[2] != "" && ttt[2] == ttt[4] && ttt[2] == ttt[6]){
-        winlose = true
-    }
+    winlosefunc([ttt[0],ttt[4],ttt[8]])
+    winlosefunc([ttt[2],ttt[4],ttt[6]])
     if(!winlose && choosenelements.length==9){
         alert("It is a Draw!")
         draw = true
-    }
-    if(winlose && choosenelements[choosenelements.length-1]==compchoice){
+    }else if(winlose && choosenelements[choosenelements.length-1]==compchoice){
         alert("Sorry, you Lose!!")
-    }
-    if(winlose && choosenelements[choosenelements.length-1]==mychoice){
+    }else if (winlose && choosenelements[choosenelements.length-1]==mychoice){
         alert("Congratulations!! You Win")
     }
 }
-
-function shuffled_arr(array) {
-    let funcarr = []
-    while(funcarr.length!=array.length){
-        let randfunc = array[Math.floor(Math.random()*array.length)]
-        if(funcarr.indexOf(randfunc)==-1){funcarr.push(randfunc)}
-    }
-    return funcarr
-}
+// Put a computerchoice in a line
 function compfunc(arr){
-    for(let index of shuffled_arr(arr)){
-        if (spans[index].innerHTML === ""){
-            spans[index].innerHTML = compchoice
-            ttt[index] = compchoice
-            rands.splice(rands.indexOf(index),1)
+    let shuffled_arr = []
+    while(shuffled_arr.length!=arr.length){
+        let randnum = arr[Math.floor(Math.random()*arr.length)]
+        if(shuffled_arr.indexOf(randnum)==-1){shuffled_arr.push(randnum)}
+    }
+    for(let item of shuffled_arr){
+        if (ttt[item].innerHTML === ""){
+            ttt[item].innerHTML = compchoice
+            onetonine.splice(onetonine.indexOf(item),1)
             break
         }
     }
+    choosenelements.push(compchoice)
+    checkwinlose()
 }
 function compfuncTwo(){
-    if([ttt[0],ttt[8],ttt[2],ttt[6]].indexOf("")!=-1){
+    if([ttt[0].innerHTML,ttt[8].innerHTML,ttt[2].innerHTML,ttt[6].innerHTML].indexOf("")!=-1){
         compfunc([0,8,6,2,4])
     }else{
-        rand = rands[Math.floor(Math.random()*rands.length)]
-        spans[rand].innerHTML = compchoice
-        ttt[rand] = compchoice
-        rands.splice(rands.indexOf(rand),1)
+        compfunc(onetonine)
     }
 }
 
-function compchooseTwoinaRow(elm) {
-    if(!zerofoureight && TwoinaRow([ttt[0],ttt[4],ttt[8]],elm)){
+function compchooseTwoThreeinaLine(elm) {
+    if(TwoThreeinaLine([ttt[0],ttt[4],ttt[8]],elm)==2){
         compfunc([0,4,8])
-        zerofoureight = true
-    }else if(!twofoursix && TwoinaRow([ttt[2],ttt[4],ttt[6]],elm)){
+    }else if(TwoThreeinaLine([ttt[2],ttt[4],ttt[6]],elm)==2){
         compfunc([2,4,6])
-        twofoursix = true
-    }else if(!zeroonetwo && TwoinaRow([ttt[0],ttt[1],ttt[2]],elm)){
+    }else if(TwoThreeinaLine([ttt[0],ttt[1],ttt[2]],elm)==2){
         compfunc([0,1,2])
-        zeroonetwo = true
-    }else if(!threefourfive && TwoinaRow([ttt[3],ttt[4],ttt[5]],elm)){
+    }else if(TwoThreeinaLine([ttt[3],ttt[4],ttt[5]],elm)==2){
         compfunc([3,4,5])
-        threefourfive = true
-    }else if(!sixseveneight && TwoinaRow([ttt[6],ttt[7],ttt[8]],elm)){
+    }else if(TwoThreeinaLine([ttt[6],ttt[7],ttt[8]],elm)==2){
         compfunc([6,7,8])
-        sixseveneight = true
-    }else if(!zerothreesix && TwoinaRow([ttt[0],ttt[3],ttt[6]],elm)){
+    }else if(TwoThreeinaLine([ttt[0],ttt[3],ttt[6]],elm)==2){
         compfunc([0,3,6])
-        zerothreesix = true
-    }else if(!onefourseven && TwoinaRow([ttt[1],ttt[4],ttt[7]],elm)){
+    }else if(TwoThreeinaLine([ttt[1],ttt[4],ttt[7]],elm)==2){
         compfunc([1,4,7])
-        onefourseven = true
-    }else if(!twofiveeight && TwoinaRow([ttt[2],ttt[5],ttt[8]],elm)){
+    }else if(TwoThreeinaLine([ttt[2],ttt[5],ttt[8]],elm)==2){
         compfunc([2,5,8])
-        twofiveeight = true
     }
 }
 
-document.getElementById("playbtn").onclick = ()=>{
-    if(isclicked && ischecked){
-        document.getElementById("play").style.display = "block"
-        document.getElementById("start").style.display = "none"
+playbtn.onclick = ()=>{
+    document.getElementById("choice").innerHTML = "You chose :<br>"+mychoice
+    if((iBegin || compBegins) && (mychoice != null || compchoice != null)){
+        start.classList.add("hide")
+        play.classList.remove("hide")
         if(compBegins && choosenelements.length == 0){
-            decider = 1
             compfuncTwo()
-            choosenelements.push(compchoice)
-            checkwinlose()
         }
         for (let ind = 0; ind < 9; ind++){
-            spans[ind].onclick = () =>{
-                if(!winlose && !draw){
-                    if(iBegin || choosenelements[choosenelements.length-1]==compchoice){
-                        if(spans[ind].innerHTML === ""){
-                            ttt[ind] = mychoice
-                            spans[ind].innerHTML = mychoice
-                            rands.splice(rands.indexOf(ind),1)
-                            choosenelements.push(mychoice)
-                            checkwinlose()    
-                            if(!winlose && !draw){
-                                while(rands.length%2==decider){
-                                    compchooseTwoinaRow(compchoice)
-                                    if(rands.length%2==(decider+1)%2){break}
-                                    compchooseTwoinaRow(mychoice)
-                                    if(rands.length%2==(decider+1)%2){break}
-                                    compfuncTwo()
-                                }
-                                choosenelements.push(compchoice)
-                                checkwinlose()    
+            ttt[ind].onclick = () =>{
+                if((!winlose && !draw) && (iBegin || choosenelements[choosenelements.length-1]==compchoice)){
+                    if(ttt[ind].innerHTML === ""){
+                        ttt[ind].innerHTML = mychoice
+                        onetonine.splice(onetonine.indexOf(ind),1)
+                        choosenelements.push(mychoice)
+                        checkwinlose()
+                        if(!winlose && !draw){
+                            while(choosenelements[choosenelements.length-1]==mychoice){
+                                compchooseTwoThreeinaLine(compchoice)
+                                if(choosenelements[choosenelements.length-1]==compchoice){break}
+                                compchooseTwoThreeinaLine(mychoice)
+                                if(choosenelements[choosenelements.length-1]==compchoice){break}
+                                compfuncTwo()
                             }
                         }
-                    }   
+                    }
                 }
             }
         }
     }
 }
 function playagain_exit(){   
-    document.getElementById("play").style.display = "none"
-    document.getElementById("start").style.display = "block"
-    winlose = draw = isclicked = ischecked = inps[0].checked = inps[1].checked = inps[0].disabled = inps[1].disabled = false 
+    play.classList.add("hide")
+    start.classList.remove("hide")
+    winlose = draw = inps[0].checked = inps[1].checked = inps[0].disabled = inps[1].disabled = false 
     choosenelements = []
-    rands = [0,1,2,3,4,5,6,7,8]
-    for (let index = 0; index < spans.length; index++) {
-        spans[index].innerHTML = ""
+    onetonine = [0,1,2,3,4,5,6,7,8]
+    for (let index = 0; index < ttt.length; index++) {
+        ttt[index].innerHTML = ""
+        ttt[index].classList.remove("switchcolor")
     }
-    cross.style.background = "white"
-    cross.style.color = "#444"
-    circle.style.background = "white"
-    circle.style.color = "#444"
-    document.getElementById("playbtn").style.background = "white"
-    document.getElementById("playbtn").style.color = "#444"
-    document.getElementById("pgexitbtn").style.background = "#444"
-    document.getElementById("pgexitbtn").style.color = "white"
-    zerofoureight = twofoursix = zeroonetwo = threefourfive = sixseveneight = zerothreesix = onefourseven = twofiveeight = false
-    ttt = [
-        "","","",
-        "","","",
-        "","",""
-    ]
-    decider = 0
     compBegins = iBegin = false
+    mychoice = compchoice = null
+    playbtn.classList.add("switchcolor")
+    cross.classList.add("switchcolor")
+    circle.classList.add("switchcolor")
 }
+
+
+
